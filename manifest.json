@@ -1,6 +1,6 @@
 {
-  "name": "Filter Stream for Google Plus",
-  "version": "0.0.1",
+  "name": "Stream Filter for Google Plus",
+  "version": "1.0.0",
   "description": "Gives you the option to filter your stream and track it.",
   "icons": {
     "16": "img/icon16.png",
@@ -22,7 +22,7 @@
   }],
   "browser_action": {
     "default_icon": "img/icon32.png", 
-    "default_title": "Filter Stream", 
+    "default_title": "Stream Filter", 
     "default_popup": "popup.html"  
   }
 }
