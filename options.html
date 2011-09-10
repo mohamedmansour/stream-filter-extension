@@ -1,0 +1,74 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <title>Filter Stream for Google Plus</title>
+  <link rel="stylesheet" type="text/css" href="/css/common.css" />
+  <link rel="stylesheet" type="text/css" href="/css/options.css" />
+  <link rel="stylesheet" type="text/css" href="/css/options_custom.css" />
+  <script type="text/javascript" src="/js/dialog_controller.js"></script>
+  <script type="text/javascript" src="/js/options.js"></script>
+</head>
+<body> 
+  <form onsubmit="return false;">
+  <div id="body-container">
+    <div id="header">
+      <h1>Filter Stream for Google Plus<em id="version"></em></h1>
+    </div>
+    <p>
+      Make sure you save the settings after you're done editing!
+      <a id="visit-extensions" href="#">Visit extension page</a>,
+      <a
+       href="https://github.com/mohamedmansour/filter-stream-extension/">
+       File bugs and suggestions
+      </a><br/><br/>
+      You should follow me on <a href="https://plus.google.com/116805285176805120365/posts">Google+</a>
+    </p>
+    <div class="extension-template">
+      <div class="extension-header">Filters</div>
+      <div class="extension-options">
+        <p>Individual fitlers will be excluded from showing up in the stream.</p>
+        <dl>
+          <dt>Filter list:</dt>
+          <dd>
+            <select id="filter_list" size="8"></select>
+            <button id="filter-list-add">Add</button>
+            <button id="filter-list-remove">Remove</button>
+            <button id="filter-list-remove-all">Remove All</button>
+            <div class="clear"></div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="extension-template">
+      <div class="extension-header">Misc</div>
+      <div class="extension-options">
+        <p>If you would like to be notified of major upgrades to this extension,
+           please make sure the box below is unchecked. You wont be spammed.</p>
+        <dl>
+          <dt>Opt-Out of future notifications:</dt>
+          <dd>
+            <label for="opt_out"><input type="checkbox" id="opt_out" /></label>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div id="extension-footer">
+      <span id="info-message">Options saved!</span>
+      <button id="button-save">Save</button>
+      <button id="button-close">Close</button>
+    </div>
+    <div id="credits">
+      Extension developed by <a href="http://mohamedmansour.com">Mohamed Mansour</a>, 
+      Source Code available in <a href="https://github.com/mohamedmansour/filter-stream-extension/">GitHub</a>, 
+      Icon designed by <a href="https://plus.google.com/104156719397280448257/about">Andy Shaw</a>
+    </div>
+  </div>
+  </form>
+  <div id="add-filter-dialog">
+    <p>Please add a filter to be exluded from being shown on the stream. You can
+       add multiple ones separated with a comma. <i>Examples</i>: "caterday", "sex", "football"</p>
+    <p class="subtitle">Filter: </p>
+    <input type="text" value="" placeholder="Filter to exclude" id="filter-item-add"/>
+  </div>
+</body>
+</html>

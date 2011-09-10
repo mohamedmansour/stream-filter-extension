@@ -1,0 +1,18 @@
+#filter_list {
+  width: 300px;
+  float: left;
+  margin-right: 10px;
+}
+#filter-list-add, #filter-list-remove, #filter-list-remove-all {
+  display: block;
+  width: 100px;
+  margin-bottom: 5px;
+}
+
+#filter-item-add {
+  width: 100%;
+}
+
+.page {
+  width: 500px;
+}

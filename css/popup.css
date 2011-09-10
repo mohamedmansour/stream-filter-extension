@@ -1,0 +1,110 @@
+body {
+  width: 300px;
+  margin: 2px;
+  font-family: Arial;
+}
+h1 {
+  font-size: 12px;
+  background-color: #444;
+  border-radius: 10px;
+  color: #EEE;
+  padding: 1px;
+  text-align: center;
+}
+h1 a {
+  color: #EEE;
+}
+/**
+ * Table Design taken from and stripped: 
+ * http://johnsardine.com/freebies/dl-html-css/simple-little-tab/
+ */
+.center {
+ text-align: center;
+}
+table {
+  padding: 0;
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+  -webkit-border-radius: 3px;
+  -webkit-box-shadow: 0 1px 2px #d1d1d1;
+  background: #eaebec;
+  border: #ccc 1px solid;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px #d1d1d1;
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow: 1px 1px 0px #fff;
+  width: 100%;
+}
+
+table tr.even td {
+  background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+}
+
+table th {
+  padding: 5px;
+  border-bottom: 1px solid #e0e0e0; border-top: 1px solid #fafafa;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+}
+
+table th:first-child {
+  padding-left: 20px;
+  text-align: left
+}
+
+table a:visited {
+  color: #999999;
+  font-weight: bold;
+  text-decoration: none
+}
+
+table a:active,
+table a:hover {
+  color: #bd5a35;
+  text-decoration: underline
+}
+
+table a:link {
+  color: #666;
+  font-weight: bold;
+  text-decoration: none
+}
+
+table tr {
+  padding-left: 4px;
+  text-align: center
+}
+
+table tr:first-child th:first-child {
+  border-top-left-radius: 3px;
+}
+
+table tr:first-child th:last-child {
+  border-top-right-radius: 3px;
+}
+
+table tr:last-child td {    border-bottom: 0 }
+
+table tr:last-child td:first-child {
+  border-bottom-left-radius: 3px;
+}
+
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 3px;
+}
+
+table tr:hover td {
+  background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+}
+
+table tr td {
+  padding: 4px;
+  border-bottom: 1px solid #e0e0e0; border-left: 1px solid #e0e0e0; border-top: 1px solid #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+}
+
+table tr td:first-child {
+  padding-left: 20px;
+  border-left: 0;
+  text-align: left
+}

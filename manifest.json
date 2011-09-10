@@ -1,0 +1,28 @@
+{
+  "name": "Filter Stream for Google Plus",
+  "version": "0.0.1",
+  "description": "Gives you the option to filter your stream and track it.",
+  "icons": {
+    "16": "img/icon16.png",
+    "32": "img/icon32.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  },
+  "background_page": "background.html",
+  "options_page": "options.html",
+  "content_scripts": [{
+      "matches": [
+        "https://plus.google.com/",
+        "https://plus.google.com/?hl=*",
+        "https://plus.google.com/u/*/",
+        "https://plus.google.com/u/*/?hl=*"
+      ],
+      "js": ["js/filter_injection.js"],
+      "run_at": "document_end"
+  }],
+  "browser_action": {
+    "default_icon": "img/icon32.png", 
+    "default_title": "Filter Stream", 
+    "default_popup": "popup.html"  
+  }
+}
