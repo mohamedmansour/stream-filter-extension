@@ -13,6 +13,6 @@ Icon designed by [Andy Shaw](https://plus.google.com/104156719397280448257/about
 
 Screenshots
 -----------------
-![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/google-plus-extension/raw/master/screenshot/marquee.png)
+![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/stream-filter-extension/raw/master/screenshot/marquee.png)
 
 
