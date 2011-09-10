@@ -16,7 +16,8 @@ PopupController.prototype.onLoad = function() {
       var tr = document.createElement('tr');
       tr.innerHTML = '<td>' +  item.user_name + '</td>' + 
           '<td>' + item.filter + '</td>' + 
-          '<td><a href="' + item.url + '" onclick="controller.openLink(this);">link</a></td>';
+          '<td><a href="' + item.url + '" onclick="controller.openLink(this);">link</a></td>' +
+          '<td>' + item.time + '</td>';
       filterDOM.appendChild(tr);
       found = true;
     }

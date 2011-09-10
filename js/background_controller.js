@@ -69,8 +69,17 @@ BackgroundController.prototype.init = function() {
     if (port.name = 'stream') {
       this.port = port;
       this.port.onMessage.addListener(this.onMessage.bind(this));
+      this.port.onDisconnect.addListener(this.onDisconnect.bind(this));
     }
   }.bind(this));
+};
+
+/**
+ * When the port disconnects, we must null out the port, since there is no
+ * consumer to use this port. We will later on connect back
+ */
+BackgroundController.prototype.onDisconnect = function(request) {
+  this.port = null;
 };
 
 /**
@@ -100,6 +109,7 @@ BackgroundController.prototype.onMessage = function(request) {
     }
     this.session_filter_log[request.post_id] = {
       url: request.post_url,
+      time: request.post_time,
       user_id: request.user_id,
       user_name: request.user_name,
       filter: request.filter

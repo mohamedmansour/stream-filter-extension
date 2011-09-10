@@ -82,19 +82,21 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   if (!itemDOM.parentNode) {
     return;
   }
-  var text = itemDOM.innerText.toLowerCase();
+  var textDOM = itemDOM.querySelector('div > div:nth-child(2) > div > div > div:nth-child(2) > div');
+  var text = textDOM.innerText.toLowerCase();
   var callback = function(filter) {
     var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
     var googleID = nameDOM.getAttribute('oid');
     var name = nameDOM.innerText;
     var postID = itemDOM.id;
-    var postURL = itemDOM.querySelector('a[target="_blank"]').href;
+    var postURL = itemDOM.querySelector('a[target="_blank"]');
     this.port.postMessage({
       method: 'SaveStat',
       user_id: googleID,
       user_name: name,
       post_id: postID,
-      post_url: postURL,
+      post_time: postURL.innerText,
+      post_url: postURL.href,
       filter: filter
     });
     itemDOM.parentNode.removeChild(itemDOM);
