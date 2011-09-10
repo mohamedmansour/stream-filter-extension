@@ -25,5 +25,14 @@ settings = {
     if (typeof val == 'object') {
       localStorage['filters'] = val.sort().join(', ');
     }
+  },
+  get inclusion_filters() {
+    var key = localStorage['inclusion_filters'];
+    return (typeof key == 'undefined') ? [] : (key == '' ? [] : key.split(', '));
+  },
+  set inclusion_filters(val) {
+    if (typeof val == 'object') {
+      localStorage['inclusion_filters'] = val.sort().join(', ');
+    }
   }
 };

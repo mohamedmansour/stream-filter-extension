@@ -41,7 +41,13 @@ BackgroundController.prototype.onInstall = function() {
  */
 BackgroundController.prototype.updateSettings = function() {
   if (this.port) {
-    this.port.postMessage({method: 'SettingsReceived', data: settings.filters});
+    this.port.postMessage({
+      method: 'SettingsReceived', 
+      data: {
+        inclusion_filters: settings.inclusion_filters,
+        exclusion_filters: settings.filters,
+      }
+    });
   }
 };
 
@@ -76,7 +82,16 @@ BackgroundController.prototype.init = function() {
  */
 BackgroundController.prototype.onMessage = function(request) {
   if (request.method == 'GetSettings') {
-    this.port.postMessage({method: 'SettingsReceived', data: settings.filters});
+    this.port.postMessage({
+      method: 'SettingsReceived', 
+      data: {
+        inclusion_filters: settings.inclusion_filters,
+        exclusion_filters: settings.filters
+      }
+    });
+  }
+  else if (request.method == 'ResetCounter') {
+      chrome.browserAction.setBadgeText({text: ''})
   }
   else if (request.method == 'SaveStat') {
     if (!this.session_filter_log[request.post_id]) {

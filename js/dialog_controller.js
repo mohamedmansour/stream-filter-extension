@@ -120,7 +120,7 @@ DialogController.prototype.onDialogKeyPressed = function (e)
 DialogController.prototype.onOk = function ()
 {
   if (this.eventMap.click) {
-    this.eventMap.click(DialogController.OK);
+    this.eventMap.click(this.id, DialogController.OK);
   }
 };
 
@@ -130,7 +130,7 @@ DialogController.prototype.onOk = function ()
 DialogController.prototype.onCancel = function ()
 {
   if (this.eventMap.click) {
-    this.eventMap.click(DialogController.CANCEL);
+    this.eventMap.click(this.id, DialogController.CANCEL);
   }
   this.setVisible(false);
 };
@@ -143,7 +143,7 @@ DialogController.prototype.setVisible = function (v)
   this.dialog.style.display = v ? '-webkit-box' : 'none';
   if (v) {
     if (this.eventMap.load) {
-      this.eventMap.load();
+      this.eventMap.load(this.id);
     }
     window.addEventListener('keyup', this.onDialogKeyPressed, false);
   }

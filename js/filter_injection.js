@@ -5,7 +5,8 @@
  * @constructor
  */
 FilterInjection = function() {
-  this.filters = [];
+  this.inclusion_filters = [];
+  this.exclusion_filters = [];
   this.port = null;
 };
 
@@ -23,6 +24,7 @@ FilterInjection.prototype.init = function() {
     this.port = chrome.extension.connect({name: 'stream'});
     this.port.onMessage.addListener(this.onMessage.bind(this));
     this.port.postMessage({method: 'GetSettings'});
+    this.port.postMessage({method: 'ResetCounter'});
     googlePlusContentPane.addEventListener('DOMNodeInserted',
                                            this.onGooglePlusContentModified.bind(this), false);
     setTimeout(this.renderAllItems.bind(this), 100);
@@ -44,7 +46,8 @@ FilterInjection.prototype.onMessage = function(request) {
  * Settings received, update content script.
  */
 FilterInjection.prototype.onSettingsReceived = function(data) { 
-  this.filters = data;
+  this.inclusion_filters = data.inclusion_filters;
+  this.exclusion_filters = data.exclusion_filters;
 };
 
 /**
@@ -80,24 +83,41 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
     return;
   }
   var text = itemDOM.innerText.toLowerCase();
-  for (var i = 0; i < this.filters.length; i++) {
-    var filter = this.filters[i];
-    if (text.indexOf(filter) != -1) {
-      var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
-      var googleID = nameDOM.getAttribute('oid');
-      var name = nameDOM.innerText;
-      var postID = itemDOM.id;
-      var postURL = itemDOM.querySelector('a[target="_blank"]').href;
-      this.port.postMessage({
-        method: 'SaveStat',
-        user_id: googleID,
-        user_name: name,
-        post_id: postID,
-        post_url: postURL,
-        filter: filter
-      });
-      itemDOM.parentNode.removeChild(itemDOM);
-      break;
+  var callback = function(filter) {
+    var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
+    var googleID = nameDOM.getAttribute('oid');
+    var name = nameDOM.innerText;
+    var postID = itemDOM.id;
+    var postURL = itemDOM.querySelector('a[target="_blank"]').href;
+    this.port.postMessage({
+      method: 'SaveStat',
+      user_id: googleID,
+      user_name: name,
+      post_id: postID,
+      post_url: postURL,
+      filter: filter
+    });
+    itemDOM.parentNode.removeChild(itemDOM);
+  }.bind(this);
+  
+  
+  // Check if we have any inclusion filters, if it doesn't match, then we exit
+  // since it doesn't match those filters.
+  if (this.inclusion_filters.length > 0) {
+    var inclusion_match = '(' + this.inclusion_filters.join('|') + ')';
+    if (!text.match(inclusion_match)) {
+      callback('Inclusion');
+      return;
+    }
+  }
+  
+  if (this.exclusion_filters.length > 0) {
+    var exclusion_match = '(' + this.exclusion_filters.join('|') + ')';
+    var match = text.match(exclusion_match);
+    if (match) {
+      callback('Exclusion');
+      console.log(match);
+      return;
     }
   }
 };

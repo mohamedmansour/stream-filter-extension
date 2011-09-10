@@ -10,7 +10,8 @@ var bkg = chrome.extension.getBackgroundPage();
 // When the DOM is loaded, make sure all the saved info is restored.
 window.addEventListener('load', onLoad, false);
 
-var dialog = null;
+var exlusionDialog = null;
+var inclusionDialog = null;
 
 /**
  * Short form for getting elements by id.
@@ -57,16 +58,27 @@ function onLoad() {
   onRestore();
   $('button-save').addEventListener('click', onSave, false);
   $('button-close').addEventListener('click', onClose, false);
-  $('filter-list-add').addEventListener('click', onFilterListAdd, false);
-  $('filter-list-remove').addEventListener('click', onFilterListRemove, false);
-  $('filter-list-remove-all').addEventListener('click', onFilterListRemoveAll, false);
+  $('exclusion-filter-list-add').addEventListener('click', onFilterListAdd, false);
+  $('exclusion-filter-list-remove').addEventListener('click', onFilterListRemove, false);
+  $('exclusion-filter-list-remove-all').addEventListener('click', onFilterListRemoveAll, false);
+  
+  $('inclusion-filter-list-add').addEventListener('click', onFilterListAdd, false);
+  $('inclusion-filter-list-remove').addEventListener('click', onFilterListRemove, false);
+  $('inclusion-filter-list-remove-all').addEventListener('click', onFilterListRemoveAll, false);
+  
   $('visit-extensions').addEventListener('click', onVisitExtension, false);
   
-  dialog = new DialogController('add-filter-dialog');
-  dialog.addEventListener('click', onDialogOk);
-  dialog.addEventListener('load', onDialogLoad);
-  dialog.setTemplate({header: 'Filter Text', ok: 'Add'});
-  dialog.init();
+  exlusionDialog = new DialogController('exclusion-add-filter-dialog');
+  exlusionDialog.addEventListener('click', onDialogOk);
+  exlusionDialog.addEventListener('load', onDialogLoad);
+  exlusionDialog.setTemplate({header: 'Filter Text', ok: 'Add'});
+  exlusionDialog.init();
+  
+  inclusionDialog = new DialogController('inclusion-add-filter-dialog');
+  inclusionDialog.addEventListener('click', onDialogOk);
+  inclusionDialog.addEventListener('load', onDialogLoad);
+  inclusionDialog.setTemplate({header: 'Filter Text', ok: 'Add'});
+  inclusionDialog.init();
 }
 
 function onVisitExtension() {
@@ -88,14 +100,22 @@ function onSave() {
   // Save settings.
   bkg.settings.opt_out = $('opt_out').checked;
 
-  // Restore filter list.
-  var filterList = [];
-  var list = $('filter_list');
+  // Restore filter list.  
+  var inclusionFilterList = [];
+  var list = $('inclusion_filter_list');
   for (var i = 0; i < list.length; i++) {
-    filterList.push(list[i].value);
+    inclusionFilterList.push(list[i].value);
   }
-  bkg.settings.filters = filterList;
-  bkg.backgroundController.updateSettings();
+  bkg.settings.inclusion_filters = inclusionFilterList;
+  
+  var exlusionFilterList = [];
+  list = $('exclusion_filter_list');
+  for (var i = 0; i < list.length; i++) {
+    exlusionFilterList.push(list[i].value);
+  }
+  bkg.settings.filters = exlusionFilterList;
+
+  bkg.controller.updateSettings();
 
   // Update status to let user know options were saved.
   var info = $('info-message');
@@ -115,25 +135,40 @@ function onRestore() {
   $('opt_out').checked = bkg.settings.opt_out;
 
   // Restore filter list.
-  var filterList = bkg.settings.filters;
-  var list = $('filter_list');
-  for (var i = 0; i < filterList.length; i++) {
-    list.add(new Option(filterList[i]));
+  var exclusionFilterList = bkg.settings.filters;
+  var list = $('exclusion_filter_list');
+  for (var i = 0; i < exclusionFilterList.length; i++) {
+    list.add(new Option(exclusionFilterList[i]));
+  }
+  
+  var inclusionFilterList = bkg.settings.inclusion_filters;
+  var list = $('inclusion_filter_list');
+  for (var i = 0; i < inclusionFilterList.length; i++) {
+    list.add(new Option(inclusionFilterList[i]));
   }
 }
 
 /**
  * On Add Event.
  */
-function onFilterListAdd() {
-  dialog.setVisible(true);
+function onFilterListAdd(e) {
+  if (e.target.id.indexOf('inclusion') == 0) {
+    inclusionDialog.setVisible(true);
+  }
+  else {
+    exlusionDialog.setVisible(true);
+  }
 }
 
 /**
  * On Remove Event.
  */
-function onFilterListRemove() {
-  var list = $('filter_list');
+function onFilterListRemove(e) {
+  var id = 'exclusion_filter_list';
+  if (e.target.id.indexOf('inclusion') == 0) {
+    id = 'inclusion_filter_list';
+  }
+  var list = $(id);
   if (list.selectedIndex != -1) {
     list.remove(list.selectedIndex);
   }
@@ -143,8 +178,12 @@ function onFilterListRemove() {
 /**
  * On Remove All Event.
  */
-function onFilterListRemoveAll() {
-  var list = $('filter_list');
+function onFilterListRemoveAll(e) {
+  var id = 'exclusion_filter_list';
+  if (e.target.id.indexOf('inclusion') == 0) {
+    id = 'inclusion_filter_list';
+  }
+  var list = $(id);
   while (list.length != 0) {
     list.remove();
   }
@@ -153,28 +192,43 @@ function onFilterListRemoveAll() {
 /**
  * On Dialog Add Event.
  */
-function onDialogOk(state) {
+function onDialogOk(id, state) {
   if (state != DialogController.OK) {
     return;
   }
-  var item = $('filter-item-add');
+
+  var idFilterList = 'exclusion_filter_list';
+  var idFilterItemAdd = 'exclusion-filter-item-add';
+  var specificDialog = exlusionDialog;
+  if (id.indexOf('inclusion') == 0) {
+    idFilterList = 'inclusion_filter_list';
+    idFilterItemAdd = 'inclusion-filter-item-add';
+    specificDialog = inclusionDialog;
+  }
+  
+  var item = $(idFilterItemAdd);
   if (item.value.trim().length == 0) {
     return;
   }
-  var list = $('filter_list');
+  
+  var list = $(idFilterList);
   var items = item.value.split(',');
   for (var i = 0; i < items.length; i++) {
     list.add(new Option(items[i].toLowerCase()));
   }
   list.selectedIndex = list.length - 1;
-  dialog.setVisible(false);
+  specificDialog.setVisible(false);
 }
 
 
 /**
  * On Dialog Add Event.
  */
-function onDialogLoad() {
-  $('filter-item-add').value = '';
-  $('filter-item-add').focus();
+function onDialogLoad(id) {
+  var idFilterItemAdd = 'exclusion-filter-item-add';
+  if (id.indexOf('inclusion') == 0) {
+    idFilterItemAdd = 'inclusion-filter-item-add';
+  }
+  $(idFilterItemAdd).value = '';
+  $(idFilterItemAdd).focus();
 }

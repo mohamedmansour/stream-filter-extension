@@ -26,14 +26,22 @@
     <div class="extension-template">
       <div class="extension-header">Filters</div>
       <div class="extension-options">
-        <p>Individual fitlers will be excluded from showing up in the stream.</p>
+        <p>Individual fitlers will control the stream.</p>
         <dl>
-          <dt>Filter list:</dt>
+          <dt>Exclusion filter <br>(Should not contain):</dt>
           <dd>
-            <select id="filter_list" size="8"></select>
-            <button id="filter-list-add">Add</button>
-            <button id="filter-list-remove">Remove</button>
-            <button id="filter-list-remove-all">Remove All</button>
+            <select id="exclusion_filter_list" size="8"></select>
+            <button id="exclusion-filter-list-add">Add</button>
+            <button id="exclusion-filter-list-remove">Remove</button>
+            <button id="exclusion-filter-list-remove-all">Remove All</button>
+            <div class="clear"></div>
+          </dd>
+          <dt>Inclusion list <br>(Should always contain):</dt>
+          <dd>
+            <select id="inclusion_filter_list" size="8"></select>
+            <button id="inclusion-filter-list-add">Add</button>
+            <button id="inclusion-filter-list-remove">Remove</button>
+            <button id="inclusion-filter-list-remove-all">Remove All</button>
             <div class="clear"></div>
           </dd>
         </dl>
@@ -64,11 +72,15 @@
     </div>
   </div>
   </form>
-  <div id="add-filter-dialog">
-    <p>Please add a filter to be exluded from being shown on the stream. You can
-       add multiple ones separated with a comma. <i>Examples</i>: "caterday", "sex", "football"</p>
-    <p class="subtitle">Filter: </p>
-    <input type="text" value="" placeholder="Filter to exclude" id="filter-item-add"/>
+  <div id="inclusion-add-filter-dialog">
+    <p>Please add a filter to always filter in. You can add multiple ones separated with a comma. <i>Examples</i>: "caterday", "sex", "football"</p>
+    <p class="subtitle">Inclusion Filter: </p>
+    <input type="text" value="" placeholder="Name of inclusion filter" id="inclusion-filter-item-add"/>
+  </div>
+  <div id="exclusion-add-filter-dialog">
+    <p>Please add a filter to always filter out. You can add multiple ones separated with a comma. <i>Examples</i>: "#photography", "#technology"</p>
+    <p class="subtitle">Exlusion Filter: </p>
+    <input type="text" value="" placeholder="Name of exclusion filter" id="exclusion-filter-item-add"/>
   </div>
 </body>
 </html>
