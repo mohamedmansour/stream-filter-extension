@@ -60,6 +60,7 @@ BackgroundController.prototype.updateSettings = function() {
  * @param {string} current  The new version updating to.
  */
 BackgroundController.prototype.onUpdate = function(previous, current) {
+  chrome.tabs.create({url: 'updates.html'});
 };
 
 /**

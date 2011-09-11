@@ -1,0 +1,88 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<title>Filter Stream Updated!</title>
+<link rel="stylesheet" type="text/css" href="/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/css/options.css" />
+<link rel="stylesheet" type="text/css" href="/css/options_custom.css" />
+<script type="text/javascript">
+var bkg = chrome.extension.getBackgroundPage();
+  
+/**
+ *  Displays version on the screen.
+ */
+function displayVersion() {
+  document.getElementById('version').innerHTML = 'Filter Stream Updated to ' + bkg.settings.version + '!';
+}
+
+/**
+ * View options screen.
+ */
+function viewOptions() {
+  window.open(chrome.extension.getURL('options.html'));
+}
+</script>
+</head>
+
+<body onload="displayVersion()"> 
+  <div id="body-container">
+    <div id="header">
+      <h1 id="version"></h1>
+      <p>
+        If you wish to <strong>opt-out</strong> from recieving these updates, please visit 
+        <a href="#" onclick="viewOptions()">options</a> and disable <strong>notify
+        new features</strong>. Follow me on <a href="https://plus.google.com/116805285176805120365/about">Google+</a>
+      </p>
+    </div>
+    <div id="main">
+      <div class="extension-template">
+        <div class="extension-header">Version 1.5.0</div>
+        <div class="extension-options">
+          <ul>
+            <li><strong>Feature: </strong> Support Regular Expressions for Exclusions and Inclusions. By wrapping the
+                keyword with forward slashes. For example, matching only hashtags would be <strong>/\\s#(.*)\\s/</strong>. 
+                If the slashes are not there, it will do a normal keyword filter.</li>
+            <li><strong>Feature: </strong> Add ability to turn on and off the filtering from options. This requires a manual 
+                stream refresh everytime you toggle this.</li>
+            <li><strong>Feature: </strong> Implement Mark as Read for the posts filtered. A new link will appear in the
+                popup that when clicked, it will reset the counter and wipe the posts.</li>
+            <li><strong>Feature: </strong> Improve the popup stats UI to discover the inclusions and exclusions faster with
+                      some text color.</li>
+            <li><strong>Feature: </strong> Improve the options page UI to better visualize the the save button on the bottom.</li>
+            <li><strong>Bugfix:</strong> Use exclusion filters before inclusion.</li>
+            <li><strong>Bugfix:</strong> Fix the bug where the popup contents and counter doesn't reset when no results appear.</li>
+            <li><strong>Bugfix: </strong> Fix GitHub URL pointing to old repository.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="extension-template">
+        <div class="extension-header">Version 1.0.0</div>
+        <div class="extension-options">
+          <ul>
+            <li><strong>Feature:</strong> Allow inclusions for filtering. This will allow keywords for filtering in.</li>
+            <li><strong>Feature:</strong> Show time in the popup when filtered happened.</li>
+            <li><strong>Bugfix:</strong> Fix the scrolling in the popup UI.</li>
+            <li><strong>Suggestion:</strong> Renamed to Stream Filter BETA.</li>
+        </div>
+      </div>
+      <div class="extension-template">
+        <div class="extension-header">Version 0.0.1</div>
+        <div class="extension-options">
+          <ul>
+            <li>Initial Release</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+      <div id="buttons">
+        <button onclick="window.close();">Close</button>
+      </div>
+      <div id="credits">
+        Extension developed by <a href="http://mohamedmansour.com">Mohamed Mansour</a>, 
+        Source Code available in <a href="http://github.com/mohamedmansour/filter-stream-extension">GitHub</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

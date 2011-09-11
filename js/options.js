@@ -56,6 +56,7 @@ function createElement(tag, opt_attr) {
  */
 function onLoad() {
   onRestore();
+  $('release-notes').addEventListener('click', onVisitReleaseNotes, false)
   $('button-save').addEventListener('click', onSave, false);
   $('button-close').addEventListener('click', onClose, false);
   $('exclusion-filter-list-add').addEventListener('click', onFilterListAdd, false);
@@ -81,9 +82,13 @@ function onLoad() {
   inclusionDialog.init();
 }
 
+function onVisitReleaseNotes() {
+  window.open(chrome.extension.getURL('updates.html'));
+}
+
 function onVisitExtension() {
- var url = 'https://chrome.google.com/webstore/detail/' + chrome.i18n.getMessage('@@extension_id');
- window.open(url);
+  var url = 'https://chrome.google.com/webstore/detail/' + chrome.i18n.getMessage('@@extension_id');
+  window.open(url);
 }
 
 /**
