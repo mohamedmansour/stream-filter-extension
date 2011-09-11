@@ -103,22 +103,24 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   }.bind(this);
   
   
-  // Check if we have any inclusion filters, if it doesn't match, then we exit
-  // since it doesn't match those filters.
-  if (this.inclusion_filters.length > 0) {
-    var inclusion_match = '(' + this.inclusion_filters.join('|') + ')';
-    if (!text.match(inclusion_match)) {
-      callback('Inclusion');
-      return;
-    }
-  }
-  
+  // Check the exclusion filters first so we can show the user which filter
+  // it was exluded in.
   if (this.exclusion_filters.length > 0) {
     var exclusion_match = '(' + this.exclusion_filters.join('|') + ')';
     var match = text.match(exclusion_match);
     if (match) {
-      callback('Exclusion');
-      console.log(match);
+      callback(match[1]);
+      return;
+    }
+  }
+  
+  // Check if we have any inclusion filters, if it doesn't match, then we exit
+  // since it doesn't match those filters.
+  if (this.inclusion_filters.length > 0) {
+    var inclusion_match = '(' + this.inclusion_filters.join('|') + ')';
+    var match = text.match(inclusion_match);
+    if (!match) {
+      callback('Inclusion');
       return;
     }
   }
