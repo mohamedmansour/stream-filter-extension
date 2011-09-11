@@ -86,12 +86,18 @@
       </div>
     </div>
     <div id="inclusion-add-filter-dialog">
-      <p>Please add a filter to always filter in. You can add multiple ones separated with a comma. <i>Examples</i>: "caterday", "sex", "football"</p>
+      <p>Please add a filter to always filter in. You can add multiple ones separated with a comma. If you are
+         familiar with regex, you can use them if they are between slashes, "/regex/" otherwise it is a simple
+         keyword search. 
+         <i>Examples (without the quotes)</i>: "technology", "photography", "google", "/\\s#.*\\s/"</p>
       <p class="subtitle">Inclusion Filter: </p>
       <input type="text" value="" placeholder="Name of inclusion filter" id="inclusion-filter-item-add"/>
     </div>
     <div id="exclusion-add-filter-dialog">
-      <p>Please add a filter to always filter out. You can add multiple ones separated with a comma. <i>Examples</i>: "#photography", "#technology"</p>
+      <p>Please add a filter to always filter out. You can add multiple ones separated with a comma. If you are
+         familiar with regex, you can use them if they are between slashes, "/regex/" otherwise it is a simple
+         keyword search. 
+        <i>Examples (without the quotes)</i>: "football", "rick roll", "/cat[e|u]rday/"</p>
       <p class="subtitle">Exlusion Filter: </p>
       <input type="text" value="" placeholder="Name of exclusion filter" id="exclusion-filter-item-add"/>
     </div>
