@@ -14,8 +14,9 @@ PopupController.prototype.onLoad = function() {
     if (filterSessions.hasOwnProperty(key)) {
       var item =  filterSessions[key];
       var tr = document.createElement('tr');
+      var isInclusion = item.filter.indexOf('+') == 0;
       tr.innerHTML = '<td>' +  item.user_name + '</td>' + 
-          '<td>' + item.filter + '</td>' + 
+          '<td class="' + (isInclusion ? 'inclusion' : 'exclusion')+ '">' + item.filter.substring(1) + '</td>' + 
           '<td><a href="' + item.url + '" onclick="controller.openLink(this);">link</a></td>' +
           '<td>' + item.time + '</td>';
       filterDOM.appendChild(tr);

@@ -15,6 +15,14 @@ h1 {
 h1 a {
   color: #EEE;
 }
+
+td.inclusion {
+  color: green;
+}
+
+td.exclusion {
+  color: red;
+}
 /**
  * Table Design taken from and stripped: 
  * http://johnsardine.com/freebies/dl-html-css/simple-little-tab/
@@ -66,9 +74,7 @@ table a:hover {
 }
 
 table a:link {
-  color: #666;
   font-weight: bold;
-  text-decoration: none
 }
 
 table tr {

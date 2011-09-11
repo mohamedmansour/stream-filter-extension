@@ -84,6 +84,8 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   }
   var textDOM = itemDOM.querySelector('div > div:nth-child(2) > div > div > div:nth-child(2) > div');
   var text = textDOM.innerText.toLowerCase();
+  
+  // Callback to gather stats.
   var callback = function(filter) {
     var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
     var googleID = nameDOM.getAttribute('oid');
@@ -102,27 +104,49 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
     itemDOM.parentNode.removeChild(itemDOM);
   }.bind(this);
   
+  // Checks if the item is a regex.
+  var isRegexFilter = function(element) {
+    return element[0] == '/' && element[element.length - 1] == '/';
+  };
   
   // Check the exclusion filters first so we can show the user which filter
   // it was exluded in.
   if (this.exclusion_filters.length > 0) {
-    var exclusion_match = '(' + this.exclusion_filters.join('|') + ')';
-    var match = text.match(exclusion_match);
-    if (match) {
-      callback(match[1]);
-      return;
-    }
+    this.exclusion_filters.forEach(function(element, index) {
+      if (isRegexFilter(element)) {
+        var match = text.match(element.substring(1, element.length - 1));
+        if (match) {
+          console.log('Matched Exclusion Regex', element);
+          callback('-' + element)
+          return;
+        }
+      }
+      else if (text.indexOf(element) != -1) {
+        console.log('Matched Exclusion Normal', element);
+        callback('-' + element);
+        return;
+      }
+    });
   }
   
   // Check if we have any inclusion filters, if it doesn't match, then we exit
   // since it doesn't match those filters.
   if (this.inclusion_filters.length > 0) {
-    var inclusion_match = '(' + this.inclusion_filters.join('|') + ')';
-    var match = text.match(inclusion_match);
-    if (!match) {
-      callback('Inclusion');
-      return;
-    }
+    this.inclusion_filters.forEach(function(element, index) {
+      if (isRegexFilter(element)) {
+        var match = text.match(element.substring(1, element.length - 1));
+        if (!match) {
+          console.log('Matched Inclusion Regex', element);
+          callback('+' + element);
+          return;
+        }
+      }
+      else if (text.indexOf(element) == -1) {
+        console.log('Matched Inclusion Normal', element);
+        callback('+' + element);
+        return;
+      }
+    });
   }
 };
 
