@@ -85,6 +85,15 @@ BackgroundController.prototype.onDisconnect = function(request) {
 };
 
 /**
+ * Reset the filter and counter.
+ */
+BackgroundController.prototype.reset = function() {
+  this.session_filter_log = {};
+  this.session_filter_length = 0;
+  chrome.browserAction.setBadgeText({text: ''});
+};
+
+/**
  * Listen on requests coming from content scripts.
  *
  * @param {object} request The request object to match data.
@@ -96,9 +105,7 @@ BackgroundController.prototype.onMessage = function(request) {
     this.updateSettings();
   }
   else if (request.method == 'ResetCounter') {
-    this.session_filter_log = {};
-    this.session_filter_length = 0;
-    chrome.browserAction.setBadgeText({text: ''})
+    this.reset();
   }
   else if (request.method == 'SaveStat') {
     if (!this.session_filter_log[request.post_id]) {
@@ -120,4 +127,11 @@ BackgroundController.prototype.onMessage = function(request) {
  */
 BackgroundController.prototype.getSessionFilters = function() {
   return this.session_filter_log;
+};
+
+/**
+ * Mark posts as read. Just resets it.
+ */
+BackgroundController.prototype.markAsRead = function() {
+  this.reset();
 };
