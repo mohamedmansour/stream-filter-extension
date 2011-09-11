@@ -105,8 +105,8 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   if (this.settings.exclusion_filters.length > 0) {
     this.settings.exclusion_filters.forEach(function(element, index) {
       if (isRegexFilter(element)) {
-        var match = text.match(element.substring(1, element.length - 1));
-        if (match) {
+        var found_pos = text.search(new RegExp(element.substring(1, element.length - 1)));
+        if (found_pos != -1) {
           onfilterCallback('-' + element)
           return;
         }
@@ -123,8 +123,8 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   if (this.settings.inclusion_filters.length > 0) {
     this.settings.inclusion_filters.forEach(function(element, index) {
       if (isRegexFilter(element)) {
-        var match = text.match(element.substring(1, element.length - 1));
-        if (!match) {
+        var found_pos = text.search(new RegExp(element.substring(1, element.length - 1)));
+        if (found_pos == -1) {
           onfilterCallback('+' + element);
           return;
         }
