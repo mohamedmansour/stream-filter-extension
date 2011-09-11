@@ -5,8 +5,7 @@
  * @constructor
  */
 FilterInjection = function() {
-  this.inclusion_filters = [];
-  this.exclusion_filters = [];
+  this.settings = {};
   this.port = null;
 };
 
@@ -38,16 +37,8 @@ FilterInjection.prototype.init = function() {
  */
 FilterInjection.prototype.onMessage = function(request) {
   if (request.method == 'SettingsReceived') {
-    this.onSettingsReceived(request.data);
+    this.settings = request.data;
   }
-};
-
-/**
- * Settings received, update content script.
- */
-FilterInjection.prototype.onSettingsReceived = function(data) { 
-  this.inclusion_filters = data.inclusion_filters;
-  this.exclusion_filters = data.exclusion_filters;
 };
 
 /**
@@ -79,14 +70,14 @@ FilterInjection.prototype.renderAllItems = function(subtreeDOM) {
  * Render item to filter text. This is a quick index of search remove.
  */
 FilterInjection.prototype.renderItem = function(itemDOM) {
-  if (!itemDOM.parentNode) {
+  if (!this.settings.enable_filtering || !itemDOM.parentNode) {
     return;
   }
   var textDOM = itemDOM.querySelector('div > div:nth-child(2) > div > div > div:nth-child(2) > div');
   var text = textDOM.innerText.toLowerCase();
   
   // Callback to gather stats.
-  var callback = function(filter) {
+  var onfilterCallback = function(filter) {
     var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
     var googleID = nameDOM.getAttribute('oid');
     var name = nameDOM.innerText;
@@ -111,17 +102,17 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   
   // Check the exclusion filters first so we can show the user which filter
   // it was exluded in.
-  if (this.exclusion_filters.length > 0) {
-    this.exclusion_filters.forEach(function(element, index) {
+  if (this.settings.exclusion_filters.length > 0) {
+    this.settings.exclusion_filters.forEach(function(element, index) {
       if (isRegexFilter(element)) {
         var match = text.match(element.substring(1, element.length - 1));
         if (match) {
-          callback('-' + element)
+          onfilterCallback('-' + element)
           return;
         }
       }
       else if (text.indexOf(element) != -1) {
-        callback('-' + element);
+        onfilterCallback('-' + element);
         return;
       }
     });
@@ -129,17 +120,17 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   
   // Check if we have any inclusion filters, if it doesn't match, then we exit
   // since it doesn't match those filters.
-  if (this.inclusion_filters.length > 0) {
-    this.inclusion_filters.forEach(function(element, index) {
+  if (this.settings.inclusion_filters.length > 0) {
+    this.settings.inclusion_filters.forEach(function(element, index) {
       if (isRegexFilter(element)) {
         var match = text.match(element.substring(1, element.length - 1));
         if (!match) {
-          callback('+' + element);
+          onfilterCallback('+' + element);
           return;
         }
       }
       else if (text.indexOf(element) == -1) {
-        callback('+' + element);
+        onfilterCallback('+' + element);
         return;
       }
     });

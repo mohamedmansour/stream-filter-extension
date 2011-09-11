@@ -34,5 +34,12 @@ settings = {
     if (typeof val == 'object') {
       localStorage['inclusion_filters'] = val.sort().join(', ');
     }
+  },
+  get enable_filtering() {
+    var key = localStorage['enable_filtering'];
+    return (typeof key == 'undefined') ? true : key === 'true';
+  },
+  set enable_filtering(val) {
+    localStorage['enable_filtering'] = val;
   }
 };

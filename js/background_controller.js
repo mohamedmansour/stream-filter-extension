@@ -46,6 +46,7 @@ BackgroundController.prototype.updateSettings = function() {
       data: {
         inclusion_filters: settings.inclusion_filters,
         exclusion_filters: settings.filters,
+        enable_filtering: settings.enable_filtering
       }
     });
   }
@@ -92,13 +93,7 @@ BackgroundController.prototype.onDisconnect = function(request) {
  */
 BackgroundController.prototype.onMessage = function(request) {
   if (request.method == 'GetSettings') {
-    this.port.postMessage({
-      method: 'SettingsReceived', 
-      data: {
-        inclusion_filters: settings.inclusion_filters,
-        exclusion_filters: settings.filters
-      }
-    });
+    this.updateSettings();
   }
   else if (request.method == 'ResetCounter') {
     this.session_filter_log = {};

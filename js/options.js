@@ -99,6 +99,7 @@ function onClose() {
 function onSave() {
   // Save settings.
   bkg.settings.opt_out = $('opt_out').checked;
+  bkg.settings.enable_filtering = $('enable_filtering').checked;
 
   // Restore filter list.  
   var inclusionFilterList = [];
@@ -133,6 +134,7 @@ function onRestore() {
   // Restore settings.
   $('version').innerHTML = ' (v' + bkg.settings.version + ')';
   $('opt_out').checked = bkg.settings.opt_out;
+  $('enable_filtering').checked = bkg.settings.enable_filtering;
 
   // Restore filter list.
   var exclusionFilterList = bkg.settings.filters;
