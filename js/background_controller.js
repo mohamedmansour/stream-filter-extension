@@ -100,7 +100,9 @@ BackgroundController.prototype.onMessage = function(request) {
     });
   }
   else if (request.method == 'ResetCounter') {
-      chrome.browserAction.setBadgeText({text: ''})
+    this.session_filter_log = {};
+    this.session_filter_length = 0;
+    chrome.browserAction.setBadgeText({text: ''})
   }
   else if (request.method == 'SaveStat') {
     if (!this.session_filter_log[request.post_id]) {
