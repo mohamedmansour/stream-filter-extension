@@ -25,7 +25,7 @@ PopupController.prototype.onLoad = function() {
   
   if (!found) {
     var tr = document.createElement('tr');
-    tr.innerHTML = '<td colspan="3" style="text-align: center;">No filtered results. <br />You might have to refresh your Stream.</td>';
+    tr.innerHTML = '<td colspan="4" style="text-align: center;">No filtered results. <br />You might have to refresh your Stream.</td>';
     filterDOM.appendChild(tr);
   }
 };
