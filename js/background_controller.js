@@ -65,6 +65,7 @@ BackgroundController.prototype.onUpdate = function(previous, current) {
  * Initialize the main Background Controller
  */
 BackgroundController.prototype.init = function() {
+  chrome.browserAction.setBadgeBackgroundColor({color: [122, 214, 253, 255]})
   chrome.extension.onConnect.addListener(function(port) {
     if (port.name = 'stream') {
       this.port = port;
