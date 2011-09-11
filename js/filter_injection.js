@@ -116,13 +116,11 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
       if (isRegexFilter(element)) {
         var match = text.match(element.substring(1, element.length - 1));
         if (match) {
-          console.log('Matched Exclusion Regex', element);
           callback('-' + element)
           return;
         }
       }
       else if (text.indexOf(element) != -1) {
-        console.log('Matched Exclusion Normal', element);
         callback('-' + element);
         return;
       }
@@ -136,13 +134,11 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
       if (isRegexFilter(element)) {
         var match = text.match(element.substring(1, element.length - 1));
         if (!match) {
-          console.log('Matched Inclusion Regex', element);
           callback('+' + element);
           return;
         }
       }
       else if (text.indexOf(element) == -1) {
-        console.log('Matched Inclusion Normal', element);
         callback('+' + element);
         return;
       }
