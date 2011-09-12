@@ -20,14 +20,27 @@ FilterInjection.ITEM_NAME_SELECTOR = 'span > a';
 FilterInjection.prototype.init = function() {
   var googlePlusContentPane = document.querySelector(FilterInjection.CONTENT_PANE_ID);
   if (googlePlusContentPane) {
-    this.port = chrome.extension.connect({name: 'stream'});
-    this.port.onMessage.addListener(this.onMessage.bind(this));
-    this.port.postMessage({method: 'GetSettings'});
-    this.port.postMessage({method: 'ResetCounter'});
+    this.initializePort();
     googlePlusContentPane.addEventListener('DOMNodeInserted',
                                            this.onGooglePlusContentModified.bind(this), false);
     setTimeout(this.renderAllItems.bind(this), 100);
   }
+};
+
+FilterInjection.prototype.initializePort = function() {
+  this.port = chrome.extension.connect({name: 'stream'});
+  this.port.onMessage.addListener(this.onMessage.bind(this));
+  this.port.onDisconnect.addListener(this.onDisconnect.bind(this));
+  this.port.postMessage({method: 'GetSettings'});
+  this.port.postMessage({method: 'ResetCounter'});
+};
+
+/**
+ * When the port has disconnected we need to refresh it to some degree.
+ */
+FilterInjection.prototype.onDisconnect = function(request) {
+  this.port = null;
+  setTimeout(this.initializePort.bind(this), 1000);
 };
 
 /**
@@ -70,7 +83,7 @@ FilterInjection.prototype.renderAllItems = function(subtreeDOM) {
  * Render item to filter text. This is a quick index of search remove.
  */
 FilterInjection.prototype.renderItem = function(itemDOM) {
-  if (!this.settings.enable_filtering || !itemDOM.parentNode) {
+  if (!this.port || !itemDOM || !this.settings.enable_filtering || !itemDOM.parentNode || itemDOM.innerText == '') {
     return;
   }
   var textDOM = itemDOM.querySelector('div > div:nth-child(2) > div > div > div:nth-child(2) > div');
@@ -79,6 +92,9 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   // Callback to gather stats.
   var onfilterCallback = function(filter) {
     var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
+    if (!itemDOM.parentNode) { // no clue why this happens ...
+      return;
+    }
     var googleID = nameDOM.getAttribute('oid');
     var name = nameDOM.innerText;
     var postID = itemDOM.id;
@@ -136,7 +152,6 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
     });
   }
 };
-
 
 // Main
 var injection = new FilterInjection();
