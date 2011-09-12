@@ -116,6 +116,12 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
     itemDOM.parentNode.removeChild(itemDOM);
   }.bind(this);
   
+  // Check if we want to block gifs.
+  if (this.settings.block_animated_gifs && textDOM.querySelector('div[data-content-type="image/gif"]')) {
+    onfilterCallback('-animated gif');
+    return;
+  }
+  
   // Checks if the item is a regex.
   var isRegexFilter = function(element) {
     return element[0] == '/' && element[element.length - 1] == '/';
@@ -128,7 +134,7 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
       if (isRegexFilter(element)) {
         var found_pos = text.search(new RegExp(element.substring(1, element.length - 1)));
         if (found_pos != -1) {
-          onfilterCallback('-' + element)
+          onfilterCallback('-' + element);
           return;
         }
       }

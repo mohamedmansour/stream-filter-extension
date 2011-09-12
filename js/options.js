@@ -106,6 +106,7 @@ function onSave() {
   bkg.settings.opt_out = $('opt_out').checked;
   bkg.settings.enable_filtering = $('enable_filtering').checked;
   bkg.settings.autoreload = $('autoreload').checked;
+  bkg.settings.block_animated_gifs = $('block_animated_gifs').checked;
 
   // Restore filter list.  
   var inclusionFilterList = [];
@@ -142,6 +143,7 @@ function onRestore() {
   $('opt_out').checked = bkg.settings.opt_out;
   $('enable_filtering').checked = bkg.settings.enable_filtering;
   $('autoreload').checked = bkg.settings.autoreload;
+  $('block_animated_gifs').checked = bkg.settings.block_animated_gifs;
 
   // Restore filter list.
   var exclusionFilterList = bkg.settings.filters;

@@ -49,4 +49,11 @@ settings = {
   set autoreload(val) {
     localStorage['autoreload'] = val;
   },
+  get block_animated_gifs() {
+    var key = localStorage['block_animated_gifs'];
+    return (typeof key == 'undefined') ? false : key === 'true';
+  },
+  set block_animated_gifs(val) {
+    localStorage['block_animated_gifs'] = val;
+  },
 };

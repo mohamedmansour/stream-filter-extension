@@ -60,7 +60,8 @@ BackgroundController.prototype.postSettings = function() {
         inclusion_filters: settings.inclusion_filters,
         exclusion_filters: settings.filters,
         enable_filtering: settings.enable_filtering,
-        autoreload: settings.autoreload
+        autoreload: settings.autoreload,
+        block_animated_gifs: settings.block_animated_gifs
       }
     });
   }
