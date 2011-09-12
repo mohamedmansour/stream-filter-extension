@@ -37,16 +37,30 @@ BackgroundController.prototype.onInstall = function() {
 };
 
 /**
- * Inform all Content Scripts that new settings are available.
+ * Call from the options page to update the settings for Google+. This will
+ * reset the keywords and bring up the DOM again.
  */
 BackgroundController.prototype.updateSettings = function() {
+  if (this.port) {
+    this.port.postMessage({
+      method: 'Reload',
+      autoreload: settings.autoreload
+    });
+  }
+};
+
+/**
+ * Inform all Content Scripts that new settings are available.
+ */
+BackgroundController.prototype.postSettings = function() {
   if (this.port) {
     this.port.postMessage({
       method: 'SettingsReceived', 
       data: {
         inclusion_filters: settings.inclusion_filters,
         exclusion_filters: settings.filters,
-        enable_filtering: settings.enable_filtering
+        enable_filtering: settings.enable_filtering,
+        autoreload: settings.autoreload
       }
     });
   }
@@ -103,7 +117,7 @@ BackgroundController.prototype.reset = function() {
  */
 BackgroundController.prototype.onMessage = function(request) {
   if (request.method == 'GetSettings') {
-    this.updateSettings();
+    this.postSettings();
   }
   else if (request.method == 'ResetCounter') {
     this.reset();

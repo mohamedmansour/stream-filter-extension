@@ -41,5 +41,12 @@ settings = {
   },
   set enable_filtering(val) {
     localStorage['enable_filtering'] = val;
-  }
+  },
+  get autoreload() {
+    var key = localStorage['autoreload'];
+    return (typeof key == 'undefined') ? false : key === 'true';
+  },
+  set autoreload(val) {
+    localStorage['autoreload'] = val;
+  },
 };

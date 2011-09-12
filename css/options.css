@@ -64,7 +64,9 @@ p {
   font-size: 85%;
   padding: 0.8em 10px;
 }
- 
+.extension-options li {
+  margin: 2px 0;
+}
 .note {
   background-color: #e0f2c0;
   border-radius: 5px;

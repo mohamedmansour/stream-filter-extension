@@ -52,6 +52,11 @@ FilterInjection.prototype.onMessage = function(request) {
   if (request.method == 'SettingsReceived') {
     this.settings = request.data;
   }
+  else if (request.method == 'Reload') {
+    if (request.autoreload) {
+      window.location.reload();
+    }
+  }
 };
 
 /**

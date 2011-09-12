@@ -40,14 +40,16 @@ function viewOptions() {
         <div class="extension-options">
           <ul>
             <li><strong>Feature: </strong> Support Regular Expressions for Exclusions and Inclusions. By wrapping the
-                keyword with forward slashes. For example, matching only hashtags would be <strong>/\\s#(.*)\\s/</strong>. 
+                keyword with forward slashes. For example, matching only hashtags would be <code>/\\s#(.*)\\s/</code>. 
                 If the slashes are not there, it will do a normal keyword filter.</li>
             <li><strong>Feature: </strong> Add ability to turn on and off the filtering from options. This requires a manual 
                 stream refresh everytime you toggle this.</li>
             <li><strong>Feature: </strong> Implement Mark as Read for the posts filtered. A new link will appear in the
                 popup that when clicked, it will reset the counter and wipe the posts.</li>
+            <li><strong>Feature: </strong> Implement auto reload setting, where you can automatically load the new settings
+                when you complete the save in options.</li>
             <li><strong>Improvement: </strong> Improve the popup stats UI to discover the inclusions and exclusions faster with
-                      some text color.</li>
+                some text color.</li>
             <li><strong>Improvement: </strong> Improve the options page UI to better visualize the the save button on the bottom.</li>
             <li><strong>Improvement: </strong> Improve the dark icon in the browser by Andy Shaw.</li>
             <li><strong>Bugfix:</strong> Use exclusion filters before inclusion.</li>
