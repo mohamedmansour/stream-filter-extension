@@ -7,6 +7,16 @@
 FilterInjection = function() {
   this.settings = {};
   this.port = null;
+  
+  // Image Overlay feature.
+  this.imageBlockDOM = document.createElement('div');
+  this.imageBlockDOM.innerHTML = 'Play Gif';
+  this.imageBlockDOM.setAttribute('style',
+    'position: relative; z-index: 9999; padding: 5px;' +
+    'background-color: rgba(0, 0, 0, 0.5); ' +
+    'color: white; font-weight: bold;  font-size: 1.5em; ' +
+    'text-shadow: 2px 2px 2px #000; ' +
+    '-webkit-transition-duration: 0.5s;');
 };
 
 FilterInjection.CONTENT_PANE_ID = '#contentPane';
@@ -128,15 +138,42 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
       var images = textDOM.querySelectorAll('div[data-content-type] img');
       for (var i = 0; i < images.length; i++) {
         var image = images[i];
-        var newSrcMatch = image.src.match(/(.+)no_expand=(\d)/);
+        var newSrcMatch = image.src.match(/(.+)resize_(h|w)=(\d+)&no_expand=(\d)/);
         if (newSrcMatch) {
           // Check if it can animate by checking the expand parameter.
           // This doesn't necessarily mean it is a gif, but better than doing
           // anything else. This will guarantee the image is not animating.
-          if (newSrcMatch[2] == '1') {
+          if (newSrcMatch[4] == '1') {
+            var originalImageSrc = newSrcMatch[0];
             var imagePartSrc = newSrcMatch[1];
-            var newSrc = imagePartSrc.replace(/(.+)(refresh=)(\d+)(.+)/, '$1$21$4');
-            image.src = newSrc + 'no_expand=0';
+            var imageResizeDirection = newSrcMatch[2];
+            var imageResizeValue = newSrcMatch[3];
+            var newImageSrc = imagePartSrc.replace(/(.+)(refresh=)(\d+)(.+)/, '$1$21$4');
+            newImageSrc = newImageSrc + 'resize_' + imageResizeDirection + '=' +
+                imageResizeValue + '&no_expand=0';
+            image.src = newImageSrc;
+                
+            // Now lets place a play button on top for only GIF images.
+            var gifImageDOM = textDOM.querySelector('div[data-content-url$=".gif"]');
+            if (gifImageDOM) {
+              var imageOverlayDOM = this.imageBlockDOM.cloneNode(true);
+              imageOverlayDOM.style.width = (imageResizeValue - 10) + 'px';
+              imageOverlayDOM.style.height = (imageResizeValue - 10) + 'px';
+              imageOverlayDOM.style.top = '-' + imageResizeValue + 'px';
+              gifImageDOM.appendChild(imageOverlayDOM);
+              
+              imageOverlayDOM.addEventListener('mouseover', function(e) {
+                imageOverlayDOM.innerHTML = '';
+                imageOverlayDOM.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+                image.src = originalImageSrc;
+              }, false);
+              
+              imageOverlayDOM.addEventListener('mouseout', function(e) {
+                imageOverlayDOM.innerHTML = 'Play Gif';
+                imageOverlayDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+                image.src = newImageSrc;
+              }, false);
+            }
           }
         }
       }
