@@ -116,9 +116,23 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
     itemDOM.parentNode.removeChild(itemDOM);
   }.bind(this);
   
-  // Check if we want to block gifs.
-  if (this.settings.block_animated_gifs && textDOM.querySelector('div[data-content-type="image/gif"]')) {
-    onfilterCallback('-animated gif');
+  // Check if we want to block gifs from running.
+  if (this.settings.block_animated_gifs) {
+    var images = textDOM.querySelectorAll('div[data-content-type] img');
+    for (var i = 0; i < images.length; i++) {
+      var image = images[i];
+      var newSrcMatch = image.src.match(/(.+)no_expand=(\d)/);
+      if (newSrcMatch) {
+        // Check if it can animate by checking the expand parameter.
+        // This doesn't necessarily mean it is a gif, but better than doing
+        // anything else. This will guarantee the image is not animating.
+        if (newSrcMatch[2] == '1') {
+          var imagePartSrc = newSrcMatch[1];
+          var newSrc = imagePartSrc.replace(/(.+)(refresh=)(\d+)(.+)/, '$1$21$4');
+          image.src = newSrc + 'no_expand=0'; 
+        }
+      }
+    }
     return;
   }
   
