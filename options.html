@@ -59,9 +59,14 @@
             <dd>
               <label for="autoreload"><input type="checkbox" id="autoreload" /></label>
             </dd>
-            <dt>Stop animated gifs:</dt>
+            <dt>GIF Image Animation:</dt>
             <dd>
-              <label for="block_animated_gifs"><input type="checkbox" id="block_animated_gifs" /></label>
+              <select id="block_animated_gifs">
+                <option value="none">None</option>
+                <option value="hide">Hide Image</option>
+                <option value="freeze">Freeze Animation</option>
+              </select>
+              <span class="note" id="block_animated_gifs_note"></span>
             </dd>
           </dl>
         </div>

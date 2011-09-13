@@ -106,7 +106,7 @@ function onSave() {
   bkg.settings.opt_out = $('opt_out').checked;
   bkg.settings.enable_filtering = $('enable_filtering').checked;
   bkg.settings.autoreload = $('autoreload').checked;
-  bkg.settings.block_animated_gifs = $('block_animated_gifs').checked;
+  bkg.settings.block_animated_gifs = $('block_animated_gifs').value;
 
   // Restore filter list.  
   var inclusionFilterList = [];
@@ -143,8 +143,16 @@ function onRestore() {
   $('opt_out').checked = bkg.settings.opt_out;
   $('enable_filtering').checked = bkg.settings.enable_filtering;
   $('autoreload').checked = bkg.settings.autoreload;
-  $('block_animated_gifs').checked = bkg.settings.block_animated_gifs;
+  $('block_animated_gifs').value = bkg.settings.block_animated_gifs;
 
+  var blockAnimatedGifsElement = $('block_animated_gifs');
+  blockAnimatedGifsElement.value = bkg.settings.block_animated_gifs;
+  blockAnimatedGifsElement.addEventListener('change', function(e) {
+    var value = this.options[this.selectedIndex].value;
+    setBlockAnimatedGifsNote(value);
+  }, false);
+  setBlockAnimatedGifsNote(bkg.settings.block_animated_gifs);
+  
   // Restore filter list.
   var exclusionFilterList = bkg.settings.filters;
   var list = $('exclusion_filter_list');
@@ -157,6 +165,23 @@ function onRestore() {
   for (var i = 0; i < inclusionFilterList.length; i++) {
     list.add(new Option(inclusionFilterList[i]));
   }
+}
+
+/**
+ * Changes the note for the block gifs, to help and assist the user what
+ * the options really mean.
+ *
+ * @param {string} type The type of message that needs to change.
+ */
+function setBlockAnimatedGifsNote(type) {
+  var message = 'Keep animating, do not block or hide.';
+  if (type == 'hide') {
+    message = 'Experimental: Hides all the animated images and stores it in the popup.';
+  }
+  else if (type == 'freeze') {
+    message = 'Experimental: Freezes all images by freezing it in one frame.';
+  }
+  $('block_animated_gifs_note').innerHTML = message;
 }
 
 /**

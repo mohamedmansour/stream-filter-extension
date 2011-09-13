@@ -51,7 +51,7 @@ settings = {
   },
   get block_animated_gifs() {
     var key = localStorage['block_animated_gifs'];
-    return (typeof key == 'undefined') ? false : key === 'true';
+    return (typeof key == 'undefined') ? 'none' : key;
   },
   set block_animated_gifs(val) {
     localStorage['block_animated_gifs'] = val;
