@@ -1,6 +1,6 @@
 {
   "name": "Stream Filter BETA for Google Plus",
-  "version": "1.6.0",
+  "version": "1.6.5",
   "description": "Gives you the option to filter your stream and track it.",
   "icons": {
     "16": "img/icon16.png",
@@ -15,7 +15,9 @@
         "https://plus.google.com/",
         "https://plus.google.com/?hl=*",
         "https://plus.google.com/u/*/",
-        "https://plus.google.com/u/*/?hl=*"
+        "https://plus.google.com/u/*/?hl=*",
+        "https://plus.google.com/stream/*",
+        "https://plus.google.com/u/*/stream/*"
       ],
       "js": ["js/filter_injection.js"],
       "run_at": "document_end"
