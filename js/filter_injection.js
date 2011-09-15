@@ -7,16 +7,6 @@
 FilterInjection = function() {
   this.settings = {};
   this.port = null;
-  
-  // Image Overlay feature.
-  this.imageBlockDOM = document.createElement('div');
-  this.imageBlockDOM.innerHTML = 'Play Gif';
-  this.imageBlockDOM.setAttribute('style',
-    'position: relative; z-index: 9999; padding: 5px;' +
-    'background-color: rgba(0, 0, 0, 0.5); ' +
-    'color: white; font-weight: bold;  font-size: 1.5em; ' +
-    'text-shadow: 2px 2px 2px #000; ' +
-    '-webkit-transition-duration: 0.5s;');
 };
 
 FilterInjection.CONTENT_PANE_ID = '#contentPane';
@@ -105,7 +95,8 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   var text = textDOM.innerText.toLowerCase();
   
   // Callback to gather stats.
-  var onfilterCallback = function(filter) {
+  var onfilterCallback = function(filter, opt_removePost) {
+    var removePost = opt_remove || true;
     var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
     if (!itemDOM.parentNode) { // no clue why this happens ...
       return;
@@ -123,59 +114,33 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
       post_url: postURL.href,
       filter: filter
     });
-    itemDOM.parentNode.removeChild(itemDOM);
+    if (removePost) {
+      itemDOM.parentNode.removeChild(itemDOM);
+    }
   }.bind(this);
   
   // Check if we want to block gifs from running.
   if (this.settings.block_animated_gifs) {
     if (this.settings.block_animated_gifs == 'hide') {
-      if (textDOM.querySelector('div[data-content-type="image/gif"]')) {
+      if (textDOM.querySelector('img[src*=".gif"]')) {
         onfilterCallback('-animated gif');
         return; // We return here since we want to force blocking.
       }
     }
     else if (this.settings.block_animated_gifs == 'freeze') {
-      var images = textDOM.querySelectorAll('div[data-content-type] img');
+      var images = textDOM.querySelectorAll('img[src*=".gif"]');
       for (var i = 0; i < images.length; i++) {
         var image = images[i];
-        var newSrcMatch = image.src.match(/(.+)resize_(h|w)=(\d+)&no_expand=(\d)/);
-        if (newSrcMatch) {
-          // Check if it can animate by checking the expand parameter.
-          // This doesn't necessarily mean it is a gif, but better than doing
-          // anything else. This will guarantee the image is not animating.
-          if (newSrcMatch[4] == '1') {
-            var originalImageSrc = newSrcMatch[0];
-            var imagePartSrc = newSrcMatch[1];
-            var imageResizeDirection = newSrcMatch[2];
-            var imageResizeValue = newSrcMatch[3];
-            var newImageSrc = imagePartSrc.replace(/(.+)(refresh=)(\d+)(.+)/, '$1$21$4');
-            newImageSrc = newImageSrc + 'resize_' + imageResizeDirection + '=' +
-                imageResizeValue + '&no_expand=0';
-            image.src = newImageSrc;
-                
-            // Now lets place a play button on top for only GIF images.
-            var gifImageDOM = textDOM.querySelector('div[data-content-url$=".gif"]');
-            if (gifImageDOM) {
-              var imageOverlayDOM = this.imageBlockDOM.cloneNode(true);
-              imageOverlayDOM.style.width = (imageResizeValue - 10) + 'px';
-              imageOverlayDOM.style.height = (imageResizeValue - 10) + 'px';
-              imageOverlayDOM.style.top = '-' + imageResizeValue + 'px';
-              gifImageDOM.appendChild(imageOverlayDOM);
-              
-              imageOverlayDOM.addEventListener('mouseover', function(e) {
-                imageOverlayDOM.innerHTML = '';
-                imageOverlayDOM.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-                image.src = originalImageSrc;
-              }, false);
-              
-              imageOverlayDOM.addEventListener('mouseout', function(e) {
-                imageOverlayDOM.innerHTML = 'Play Gif';
-                imageOverlayDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-                image.src = newImageSrc;
-              }, false);
-            }
-          }
-        }
+        var originalImageSrc = image.src;
+        var newImageSrc = originalImageSrc.replace(/\/([^\/]*)$/, '-k-o/$1');
+        image.src = newImageSrc;
+        image.addEventListener('mouseover', function(e) {
+          image.src = originalImageSrc;
+        }, false);
+        
+        image.addEventListener('mouseout', function(e) {
+          image.src = newImageSrc;
+        }, false);
       }
       // We don't return here since we might have a filter we want to control.
     }

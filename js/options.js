@@ -179,7 +179,7 @@ function setBlockAnimatedGifsNote(type) {
     message = 'Experimental: Hides all the animated images and stores it in the popup.';
   }
   else if (type == 'freeze') {
-    message = 'Experimental: Freezes all images by freezing it in one frame.';
+    message = 'Experimental: Freezes all images by adding a play button on top of it!';
   }
   $('block_animated_gifs_note').innerHTML = message;
 }
