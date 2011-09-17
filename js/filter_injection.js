@@ -96,7 +96,7 @@ FilterInjection.prototype.renderItem = function(itemDOM) {
   
   // Callback to gather stats.
   var onfilterCallback = function(filter, opt_removePost) {
-    var removePost = opt_remove || true;
+    var removePost = opt_removePost || true;
     var nameDOM = itemDOM.querySelector(FilterInjection.ITEM_NAME_SELECTOR);
     if (!itemDOM.parentNode) { // no clue why this happens ...
       return;
